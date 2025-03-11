@@ -1,29 +1,28 @@
-// Ваш ключ API Unsplash
-const apiKey = 'wBZBYNpXdRU9GJQK1GGtXCww-pGL2kxfCZUr3CJHkFU';
+(function () {
+    const apiKey = 'wBZBYNpXdRU9GJQK1GGtXCww-pGL2kxfCZUr3CJHkFU';
 
-// Получение случайного изображения с Unsplash
-async function loadRandomPhoto() {
-    try {
-        const response = await fetch(
-            `https://api.unsplash.com/photos/random?client_id=${apiKey}&orientation=landscape`,
-            { mode: 'cors' }
-        );
-        const data = await response.json();
+    async function loadRandomPhoto() {
+        try {
+            const response = await fetch(
+                `https://api.unsplash.com/photos/random?client_id=${apiKey}&orientation=landscape`,
+                { mode: 'cors' }
+            );
+            const data = await response.json();
 
-        // Отображение изображения и автора
-        document.getElementById('photo').src = data.urls.regular;
-        document.getElementById('author').innerText = data.user.name;
+            // Изображение и автор
+            document.getElementById('photo').src = data.urls.regular;
+            document.getElementById('author').innerText = data.user.name;
 
-        // Установка количества лайков из локального хранилища
-        const likes = localStorage.getItem('likes');
-        document.getElementById('likes').innerText = likes ? likes : 0;
+            // Количество лайков из локального хранилища
+            const likes = localStorage.getItem('likes');
+            document.getElementById('likes').innerText = likes ? likes : 0;
 
-        // Добавление изображения в историю просмотров
-        addToHistory(data.urls.small, data.user.name);
-    } catch (error) {
-        console.error('Ошибка при получении фотографии:', error);
+            // Добавление изображения в историю просмотров
+            addToHistory(data.urls.small, data.user.name);
+        } catch (error) {
+            console.error('Ошибка при получении фотографии:', error);
+        }
     }
-}
 
 // Функция увеличения количества лайков
 function incrementLikes() {
@@ -47,19 +46,16 @@ function addToHistory(imageUrl, photographer) {
     // Сохраняем обновлённый массив в локальное хранилище
     localStorage.setItem('history', JSON.stringify(historyItems));
 
-    // Отрисовываем историю на странице
     renderHistory();
 }
 
-// Функция отображения истории просмотров
+// Функция истории просмотров
 function renderHistory() {
     const historyItems = JSON.parse(localStorage.getItem('history')) || [];
     const historyContainer = document.getElementById('history');
 
-    // Очищаем предыдущий контент
     historyContainer.innerHTML = '';
 
-    // Генерируем элементы истории
     historyItems.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'history-item';
@@ -77,8 +73,7 @@ function renderHistory() {
     });
 }
 
-// Загрузка первой фотографии при загрузке страницы
 window.onload = loadRandomPhoto;
 
-// Вывод истории просмотров при загрузке страницы
 renderHistory();
+})();

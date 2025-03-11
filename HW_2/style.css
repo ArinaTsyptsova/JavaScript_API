@@ -41,7 +41,7 @@
     transform: translateX(-50%);
     width: 90%;
     max-width: 700px;
-    z-index: 9999; /* Высокая приоритетность */
+    z-index: 9999;
 }
 
 .controls button {
